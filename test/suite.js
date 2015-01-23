@@ -24,7 +24,7 @@ var content = Bacon.fromNodeCallback(fs.readFile, file)
     return S("" + item).lines();
     // return "" + item
   })
-  .flatMap(Bacon.fromArray)
+  .flatMapConcat(Bacon.fromArray)
   .filter(function(item) {
     return (item !== "");
   })
@@ -33,20 +33,49 @@ var content = Bacon.fromNodeCallback(fs.readFile, file)
   })
 
 
-var text = content
+var doc = new Bacon.Bus();
+var commands = new Bacon.Bus();
+commands.plug(content);
+// doc.plug(commands);
+
+var textBus = new Bacon.Bus();
+
+textBus.plug(content)
+
+var buffer = "";
+
+var text = textBus
   .filter(function(item) {
     return (item !== "");
   })
   .filter(function(item) {
     return !S(item).startsWith("|");
   })
-  .scan("", function(a, b) {
-    return a + " " + b;
+  // .filter(function(item) {
+  // 	return S(item).startsWith("|text") || !S(item).startsWith("|");
+  // })
+  .map(function(item) {
+    if (buffer === "") {
+      buffer = item;
+
+    } else {
+      buffer += " " + item;
+    }
+    return buffer;
   })
+  // .log("Text: ")
+text.onValue();
 
 
+// text.onValue();
 
-var commands = content
+function resetText(argument) {
+  // text.sampledBy(Bacon.constant("RESET"));
+  textBus.push("RESET");
+}
+
+
+commands
   .filter(function(item) {
     return S(item).startsWith("|");
   })
@@ -68,21 +97,30 @@ var commands = content
     var command = Bacon.constant(item[1]);
     var value;
     if (item[2] === "$text") {
-      value = text;
+      value = Bacon.constant("" + buffer);
     } else {
       value = Bacon.constant(item[2]);
     }
+    buffer = "";
     return Bacon.combineTemplate({
       command: command,
       value: value
     })
-  }).log();
+  })
+  .log("Command: ")
+  // return {
+  // 	func: item[1],
+  // 	params: item[2]
+  // }
+
+doc
+  .flatMap(function(item) {
+    // return Bacon.constant(model).assign(model, item.func, item.params);
+    return item
+  })
+  .log("Document: ")
 
 
 function notNullFilter(item) {
   return item !== null;
 }
-
-
-
-var xyz;
