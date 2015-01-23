@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "baconjs": "^0.7.42",
+    "bluebird": "^2.8.2",
+    "cheerio": "^0.18.0",
     "fs-extra": "^0.14.0",
     "pdfkit": "^0.7.0",
     "string": "^3.0.0",

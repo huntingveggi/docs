@@ -4,6 +4,10 @@ var Bacon = require("baconjs");
 var os = require("os");
 var S = require("string");
 var sugar = require("sugar");
+var cheerio = require('cheerio');
+var PDFDocument = require('pdfkit');
+var fs = require('fs');
+var Promise = require('bluebird');
 
 var model = {
   name: "Dennis Ahaus",
@@ -17,110 +21,76 @@ var model = {
   }
 }
 
-var file = __dirname + "/text.txt";
-
-var content = Bacon.fromNodeCallback(fs.readFile, file)
-  .map(function(item) {
-    return S("" + item).lines();
-    // return "" + item
-  })
-  .flatMapConcat(Bacon.fromArray)
-  .filter(function(item) {
-    return (item !== "");
-  })
-  .filter(function(item) {
-    return !S(item).startsWith("//");
-  })
+var doc = new PDFDocument();
+doc.pipe(fs.createWriteStream('./test.pdf'));
+// doc.text("jadshlashldashdl", 50, 50);
 
 
-var doc = new Bacon.Bus();
-var commands = new Bacon.Bus();
-commands.plug(content);
-// doc.plug(commands);
+var file = __dirname + "/text.xml";
+var data = fs.readFileSync(file);
+var $ = cheerio.load(data, {
+  normalizeWhitespace: false,
+  xmlMode: false,
+  decodeEntities: true
+});
 
-var textBus = new Bacon.Bus();
+var elems = {
+  text: Text,
+  movedown: MoveDown
+}
 
-textBus.plug(content)
+var commands = [];
+$("root").children().each(function(i, elem) {
+  var obj = find(elem);
+  commands.push(obj);
+})
 
-var buffer = "";
-
-var text = textBus
-  .filter(function(item) {
-    return (item !== "");
-  })
-  .filter(function(item) {
-    return !S(item).startsWith("|");
-  })
-  // .filter(function(item) {
-  // 	return S(item).startsWith("|text") || !S(item).startsWith("|");
-  // })
-  .map(function(item) {
-    if (buffer === "") {
-      buffer = item;
-
-    } else {
-      buffer += " " + item;
-    }
-    return buffer;
-  })
-  // .log("Text: ")
-text.onValue();
+var result = Bacon
+  .fromArray(commands)
+  // .log()
+  .flatMap(function(item) {
+    item.exec(doc);
+    return item;
+  }).log();
 
 
-// text.onValue();
+result.onEnd(function() {
+  doc.end();
+});
 
-function resetText(argument) {
-  // text.sampledBy(Bacon.constant("RESET"));
-  textBus.push("RESET");
+
+
+function find(elem) {
+  var obj = elems[elem.tagName.toLowerCase()];
+  return new obj(elem);
 }
 
 
-commands
-  .filter(function(item) {
-    return S(item).startsWith("|");
-  })
-  .map(function(item) {
-    return S(item).chompLeft("|").s;
-  })
-  .map(function(item) {
-    return item.split(/->/)
-  })
-  .flatMap(Bacon.fromArray)
-  .filter(notNullFilter)
-  .map(function(item) {
-    return /(.*)\((.*)\)/gi.exec(item);
-  })
-  .filter(function(item) {
-    return item.length > 1;
-  })
-  .flatMap(function(item) {
-    var command = Bacon.constant(item[1]);
-    var value;
-    if (item[2] === "$text") {
-      value = Bacon.constant("" + buffer);
-    } else {
-      value = Bacon.constant(item[2]);
+function Text(elem) {
+
+  var self = this;
+  this.name = elem.tagName;
+  this.fontFamily = $(elem).css("font-family");
+  this.fontSize = $(elem).css("font-size");
+  var text = S($(elem).text()).trim().s;
+  var lines = S(text).lines();
+  lines.forEach(function(line) {
+    line = S(line).trim().s;
+    if (line) {
+      self.text += " " + line;
     }
-    buffer = "";
-    return Bacon.combineTemplate({
-      command: command,
-      value: value
-    })
   })
-  .log("Command: ")
-  // return {
-  // 	func: item[1],
-  // 	params: item[2]
-  // }
 
-doc
-  .flatMap(function(item) {
-    // return Bacon.constant(model).assign(model, item.func, item.params);
-    return item
-  })
-  .log("Document: ")
+  this.exec = function(doc) {
+    console.log("text: ", this.text);
+    doc.text(this.text);
+  }.bind(this)
+}
 
+function MoveDown(elem) {
 
-function notNullFilter(item) {
-  return item !== null;
+  this.exec = function(doc) {
+    doc.moveDown();
+  }.bind(this)
+
 }
