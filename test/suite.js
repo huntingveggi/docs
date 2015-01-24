@@ -1,4 +1,3 @@
-var Document = require(__dirname + "/../modules/core/Document");
 var fs = require("fs");
 var Bacon = require("baconjs");
 var os = require("os");
@@ -10,15 +9,8 @@ var fs = require('fs');
 var Promise = require('bluebird');
 
 var model = {
-  name: "Dennis Ahaus",
-  name2: ["BLA", "BLUB"],
-
-  fontSize: function(data) {
-    console.log("Calling fontSize", data);
-  },
-  text: function(data) {
-    console.log("Calling text: ", data);
-  }
+	name: "Dennis Ahaus",
+	name2: ["BLA", "BLUB"],
 }
 
 var doc = new PDFDocument();
@@ -29,68 +21,31 @@ doc.pipe(fs.createWriteStream('./test.pdf'));
 var file = __dirname + "/text.xml";
 var data = fs.readFileSync(file);
 var $ = cheerio.load(data, {
-  normalizeWhitespace: false,
-  xmlMode: false,
-  decodeEntities: true
+	normalizeWhitespace: false,
+	xmlMode: false,
+	decodeEntities: true
 });
 
-var elems = {
-  text: Text,
-  movedown: MoveDown
-}
+var ElementFactory = require(__dirname + '/../modules/factories.js').ElementFactory;
 
 var commands = [];
 $("root").children().each(function(i, elem) {
-  var obj = find(elem);
-  commands.push(obj);
+	var Component = ElementFactory.getByElement(elem);
+	if (Component) {
+		var c = new Component(elem);
+		c.setModel(model);
+		commands.push(c);
+	}
 })
 
 var result = Bacon
-  .fromArray(commands)
-  // .log()
-  .flatMap(function(item) {
-    item.exec(doc);
-    return item;
-  }).log();
+	.fromArray(commands)
+	// .log()
+	.flatMap(function(item) {
+		item.exec(doc);
+	})
 
 
 result.onEnd(function() {
-  doc.end();
+	doc.end();
 });
-
-
-
-function find(elem) {
-  var obj = elems[elem.tagName.toLowerCase()];
-  return new obj(elem);
-}
-
-
-function Text(elem) {
-
-  var self = this;
-  this.name = elem.tagName;
-  this.fontFamily = $(elem).css("font-family");
-  this.fontSize = $(elem).css("font-size");
-  var text = S($(elem).text()).trim().s;
-  var lines = S(text).lines();
-  lines.forEach(function(line) {
-    line = S(line).trim().s;
-    if (line) {
-      self.text += " " + line;
-    }
-  })
-
-  this.exec = function(doc) {
-    console.log("text: ", this.text);
-    doc.text(this.text);
-  }.bind(this)
-}
-
-function MoveDown(elem) {
-
-  this.exec = function(doc) {
-    doc.moveDown();
-  }.bind(this)
-
-}

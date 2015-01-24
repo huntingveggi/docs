@@ -1,17 +1,57 @@
-var PDFDocument = require("pdfkit");
+(function() {
+	"use strict";
 
-function Document(argument) {
-	this._doc = new PDFDocument();
-}
+	var fs = require("fs");
+	var Bacon = require("baconjs");
+	var os = require("os");
+	var S = require("string");
+	var sugar = require("sugar");
+	var cheerio = require('cheerio');
+	var PDFDocument = require('pdfkit');
+	var fs = require('fs');
+	var Promise = require('bluebird');
 
-Document.prototype.add = function(elem) {
-	if (elem instanceof Text) {
-		this.addText(elem)
+
+	function Document(args) {
+
+
+
 	}
-}
 
-Document.prototype.addText = function(text) {
-	this._doc.text
-}
+	Document.prototype.render = function(target) {
 
-module.exports = Document;
+		var doc = new PDFDocument();
+		doc.pipe(target);
+
+
+		var ElementFactory = require(__dirname + '/../modules/factories.js').ElementFactory;
+
+		var components = [];
+		$("root").children().each(function(i, elem) {
+			var Component = ElementFactory.getByElement(elem);
+			if (Component) {
+				var c = new Component(elem);
+				c.setModel(model);
+				components.push(c);
+			}
+		})
+
+		var result = Bacon
+			.fromArray(components)
+			// .log()
+			.flatMap(function(item) {
+				return item.exec(doc);
+			})
+
+
+		result.onEnd(function() {
+			doc.end();
+		});
+
+		return result;
+
+	};
+
+
+
+}());

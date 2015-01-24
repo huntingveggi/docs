@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-  <text style="font-size:12">
-    Hallo Test ${name}
-
-    asdas
-    dasd
+  <text style="font-size:12; x:150; y:50">
+    Hallo ${name}
   </text>
   <moveDown></moveDown>
+  <text style="font-size:12">
+    Zeile 2;
+  </text>
 </root>
