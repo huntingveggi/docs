@@ -42,7 +42,7 @@ var result = Bacon
 	.fromArray(commands)
 	// .log()
 	.flatMap(function(item) {
-		item.exec(doc);
+		return Bacon.fromPromise(item.exec(doc));
 	})
 
 

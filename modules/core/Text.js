@@ -16,7 +16,6 @@
 	    var self = this;
 
 	    this.options = options;
-	    this.name = elem.tagName;
 	    this.text = "";
 	    this.fontFamily = $(elem).css("font-family");
 	    this.fontSize = $(elem).css("font-size");
@@ -24,7 +23,7 @@
 	    this.y = $(elem).css("y") || null;
 
 	    if (this.x) {
-	      this.x = parseInt(self.x);
+	      this.x = parseInt(this.x);
 	    }
 	    if (this.y) {
 	      this.y = parseInt(this.y);
