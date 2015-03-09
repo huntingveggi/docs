@@ -1,0 +1,7 @@
+[Dolphin]
+Timestamp=2015,3,9,19,44,33
+Version=3
+
+[Settings]
+HiddenFilesShown=true
+/node_modules/
