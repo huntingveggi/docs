@@ -1,0 +1,45 @@
+{
+  "name": "http",
+  "version": "0.0.0",
+  "description": "The best module ever.",
+  "author": {
+    "name": "Dennis Ahaus",
+    "email": "dennis.ahaus@gmail.com",
+    "url": "http://www.dennis-ahaus.de"
+  },
+  "repository": "DennisAhaus/http",
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "cli.js"
+  ],
+  "keywords": [
+    "http",
+    ""
+  ],
+  "dependencies": {
+    "body-parser": "^1.12.0",
+    "expect": "^1.6.0",
+    "express": "^4.12.2",
+    "meow": "^2.0.0",
+    "snooze": "^1.0.0-alpha.6",
+    "snooze-baselib": "^1.0.0-alpha.3",
+    "string": "^3.0.0"
+  },
+  "devDependencies": {
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "load-grunt-tasks": "^1.0.0",
+    "time-grunt": "^1.0.0",
+    "grunt-mocha-cli": "^1.11.0",
+    "jshint-stylish": "^1.0.0"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "bin": {
+    "http": "cli.js"
+  }
+}
