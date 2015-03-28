@@ -7,29 +7,41 @@
   var config = require('config');
 
 
-  var myApp = snooze.module("formatter-server", ["snooze-baselib"]);
+  var myApp = snooze.module("formatter-server");
 
   myApp
-    .service("port", function() {
-      return config.get("server.port");
-    })
     .registerEntitiesFromPath("lib/router/*")
-    .run(function(FormatterRouter, port) {
+    .service("application", function(FormatterRouter) {
 
       var app = express();
-
-
-      app.use(bodyParser.json())
-
+      app.use(bodyParser.json());
       app.use("/api/", new FormatterRouter());
 
-      app.listen(port, function() {
-        console.log("Server listening on port %s", port);
-      })
+      return app;
 
     })
-    .wakeup()
+    .service("server", function(application, port) {
 
+      var server;
+
+      return {
+        start: function() {
+          server = application.listen(port);
+          return Promise.resolve(server);
+        },
+        stop: function() {
+          if (server) {
+            return Promise
+              .resolve()
+              .then(function() {
+                return server.close();
+              })
+          }
+          return Promise.reject(null);
+        }
+      }
+
+    })
 
 
 }());

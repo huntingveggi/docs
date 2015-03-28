@@ -1,25 +1,40 @@
 (function() {
-	"use strict";
+  "use strict";
 
-	var snooze = require('snooze');
+  var snooze = require('snooze');
 
-	function FormatController() {
+  var testdata = {
+    text: {
+      value: "Hello World"
+    }
+  }
 
-	}
+  function format(req, res, next) {
+    var service = this.getService();
+    service.format()
+      .then(function(result) {
+        res.status(200).json(result);
+      })
+  }
 
-	function format(req, res, next) {
+  function getService() {
+    return this._service;
+  }
 
-	}
+  snooze
+    .module("formatter-server")
+    .service("FormatterController", function factory(Formatter) {
 
-	function factory() {
 
-		FormatController.prototype.format = format;
+      function FormatterController(service) {
+        this._service = service || new Formatter();
+      }
 
-		return FormatController;
-	}
+      FormatterController.prototype.format = format;
+      FormatterController.prototype.getService = getService;
 
-	snooze
-		.module("formatter-server")
-		.service("FormatController", factory)
+      return FormatterController;
+
+    })
 
 }());

@@ -1,24 +1,29 @@
 (function() {
-  "use strict";
+	"use strict";
 
-  var snooze = require('snooze');
+	var snooze = require('snooze');
 
-  function FormatterRouter() {
+	snooze
+		.module("formatter-server")
+		.registerEntitiesFromPath("lib/controller/*")
+		.service("FormatterRouter", function factory(FormatterController) {
 
-    var router = require('express').Router();
+			function FormatterRouter() {
 
-    return router;
+				var router = require('express').Router();
 
-  }
+				var controller = new FormatterController();
 
-  function factory() {
-    return FormatterRouter;
-  }
+				router.get('/format', controller.format.bind(controller));
 
-  snooze
-    .module("formatter-server")
-    .registerEntitiesFromPath("lib/controller/*")
-    .service("FormatterRouter", factory)
+				return router;
+
+			}
+
+			return FormatterRouter;
+
+
+		})
 
 
 

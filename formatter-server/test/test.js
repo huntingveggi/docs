@@ -1,11 +1,41 @@
-/*global describe, it */
-'use strict';
-var assert = require('assert');
-var http = require('../');
+(function() {
+  "use strict";
 
-describe('http node module', function () {
-  it('must have at least one test', function () {
-    http();
-    assert(false, 'I was too lazy to write any tests. Shame on me.');
+  var expect = require('expect');
+  var snooze = require('snooze');
+  var config = require('config');
+
+  var app = snooze.module('formatter-server', ['snooze-baselib', 'formatter']);
+
+  beforeEach(function() {
+    app.runs.length = 0;
+    app.configs.length = 0;
+  })
+
+  var globalServer;
+
+
+  after(function(done) {
+    globalServer.stop();
+    done();
   });
-});
+
+  describe("Test formatter-server", function() {
+
+    it(" - server start", function(done) {
+
+      app
+        .constant("port", config.get("server.port"))
+        .registerEntitiesFromPath('index.js')
+        .run(function(server, port) {
+          globalServer = server;
+          server.start()
+          done();
+        })
+        .wakeup();
+
+    })
+
+  })
+
+}());

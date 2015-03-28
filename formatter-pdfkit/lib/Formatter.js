@@ -1,24 +1,32 @@
 (function() {
-	"use strict";
+  "use strict";
 
-	var snooze = require('snooze');
+  var snooze = require('snooze');
 
-	function format(model) {
+  function format() {
+    var model = this.getModel();
+    return Promise.resolve({
+      mess: "asdasdas"
+    });
+  }
 
-	}
+  function getModel() {
+    return this._model;
+  }
 
-	snooze
-		.module("formatter-pdfkit")
-		.service("Formatter", function() {
+  snooze
+    .module("formatter-pdfkit")
+    .service("PdfKitFormatter", function PdfKitFormatterFactory() {
 
-			function Formatter() {
+      function PdfKitFormatter(model) {
+        this._model = model;
+      }
 
-			}
+      PdfKitFormatter.prototype.format = format;
+      PdfKitFormatter.prototype.getModel = getModel;
 
-			Formatter.prototype.format = format;
+      return PdfKitFormatter;
 
-			return Formatter;
-
-		})
+    })
 
 }());

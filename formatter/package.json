@@ -1,22 +1,21 @@
 {
-  "name": "formatter",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "baconjs": "^0.7.53",
-    "config": "^1.12.0",
-    "expect": "^1.6.0",
-    "fs-extra": "^0.16.5",
-    "pdfkit": "^0.7.0",
-    "snooze": "^1.0.0-alpha.6",
-    "snooze-baselib": "^1.0.0-alpha.3",
-    "string": "^3.0.1",
-    "through": "^2.3.6"
-  }
+	"name": "formatter",
+	"version": "0.0.1",
+	"description": "",
+	"main": "index.js",
+	"repository": "http://github.com/DennisAhaus/docs.git",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"baconjs": "^0.7.53",
+		"config": "^1.12.0",
+		"expect": "^1.6.0",
+		"formatter-pdfkit": "file:../formatter-pdfkit",
+		"snooze": "^1.0.0-alpha.6",
+		"snooze-baselib": "^1.0.0-alpha.3",
+		"string": "^3.0.1"
+	}
 }
