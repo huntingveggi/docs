@@ -16,17 +16,17 @@
 
 	snooze
 		.module("formatter")
-		.service("Formatter", function factory() {
+		.service("Formatter", function factory(PdfKitFormatter) {
 
-			function Formatter() {
+			// function Formatter() {
+			//
+			// }
+			//
+			// Formatter.prototype.format = format;
+			//
+			// return Formatter;
 
-			}
-
-			Formatter.prototype.format = format;
-
-			return Formatter;
-
-			// return PdfKitFormatter;
+			return PdfKitFormatter;
 
 
 		})

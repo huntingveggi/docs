@@ -1,14 +1,10 @@
 (function() {
-	"use strict";
+  "use strict";
 
-	var snooze = require('snooze');
+  var snooze = require('snooze');
 
-	snooze
-		.module("formatter-pdfkit", ['snooze-baselib'])
-		.registerEntitiesFromPath(__dirname + '/lib/**/*.js')
-		.service("main", function() {
-			return {};
-		})
-
+  snooze
+    .module("formatter-pdfkit", ['snooze-baselib'])
+    .registerEntitiesFromPath('lib/services/*.js')
 
 }());

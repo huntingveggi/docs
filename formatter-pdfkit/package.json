@@ -1,45 +1,45 @@
 {
-	"name": "formatter-pdfkit",
-	"version": "0.0.1",
-	"description": "formatter-pdfkit module",
-	"author": {
-		"name": "Dennis Ahaus",
-		"email": "dennis.ahaus@gmail.com",
-		"url": "http://www.dennis-ahaus.de"
-	},
-	"repository": "DennisAhaus/formatter-pdfkit",
-	"license": "MIT",
-	"files": [
-		"lib",
-		"index.js",
-		"README.md"
-	],
-	"keywords": [
-		"pdf",
-		"formatter-pdfkit"
-	],
-	"dependencies": {
-		"baconjs": "^0.7.53",
-		"expect": "^1.6.0",
-		"fs-extra": "^0.16.5",
-		"moment": "^2.9.0",
-		"pdfkit": "^0.7.1",
-		"snooze": "^1.0.0-alpha.6",
-		"snooze-baselib": "^1.0.0-alpha.3",
-		"string": "^3.1.1",
-		"underscore": "^1.8.2"
-	},
-	"devDependencies": {
-		"grunt-cli": "^0.1.13",
-		"grunt-contrib-jshint": "^0.10.0",
-		"grunt-contrib-nodeunit": "^0.4.1",
-		"grunt-contrib-watch": "^0.6.1",
-		"load-grunt-tasks": "^1.0.0",
-		"time-grunt": "^1.0.0",
-		"grunt-mocha-cli": "^1.11.0",
-		"jshint-stylish": "^1.0.0"
-	},
-	"scripts": {
-		"test": "grunt"
-	}
+  "name": "formatter-pdfkit",
+  "version": "0.0.1",
+  "main": "index.js",
+  "description": "formatter-pdfkit module",
+  "author": {
+    "name": "Dennis Ahaus",
+    "email": "dennis.ahaus@gmail.com",
+    "url": "http://www.dennis-ahaus.de"
+  },
+  "license": "MIT",
+  "files": [
+    "lib",
+    "index.js",
+    "README.md"
+  ],
+  "keywords": [
+    "pdf",
+    "formatter-pdfkit"
+  ],
+  "dependencies": {
+    "baconjs": "^0.7.53",
+    "expect": "^1.6.0",
+    "fs-extra": "^0.16.5",
+    "moment": "^2.9.0",
+    "pdfkit": "^0.7.1",
+    "snooze": "^1.0.0-alpha.6",
+    "snooze-baselib": "^1.0.0-alpha.3",
+    "string": "^3.1.1",
+    "underscore": "^1.8.2"
+  },
+  "devDependencies": {
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "load-grunt-tasks": "^1.0.0",
+    "time-grunt": "^1.0.0",
+    "grunt-mocha-cli": "^1.11.0",
+    "jshint-stylish": "^1.0.0"
+  },
+  "scripts": {
+    "test": "grunt"
+  }
 }
