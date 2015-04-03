@@ -1,10 +1,12 @@
 (function() {
-  "use strict";
+	"use strict";
 
-  var snooze = require('snooze');
+	var snooze = require('snooze');
 
-  snooze
-    .module("formatter", ["snooze-baselib", "formatter-pdfkit"])
-    .registerEntitiesFromPath('lib/formatter/*.js')
+	snooze
+		.module("formatter", ["snooze-baselib", "formatter-pdfkit",
+			"formatter-components"
+		])
+		.registerEntitiesFromPath('lib/formatter/*.js')
 
 }());

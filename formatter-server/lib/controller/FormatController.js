@@ -3,19 +3,21 @@
 
 	var snooze = require('snooze');
 
-	var testdata = {
-		text: {
-			value: "Hello World"
+	var testModel = [{
+		type: "text",
+		value: "Hello World",
+		options: {
+			x: 100,
+			y: 100
 		}
-	}
+	}]
 
 	function format(req, res, next) {
-		var service = this.getService();
+		// var service = this.getService();
+		var service = new FormatterController.Formatter(testData);
 		service.format()
-			.then(function(result) {
-				// res.status(200).json(result);
-				console.log('result: ', result);
-				res.download(result);
+			.then(function(stream) {
+				stream.pipe(res);
 			})
 	}
 
@@ -27,9 +29,10 @@
 		.module("formatter-server")
 		.service("FormatterController", function factory(Formatter) {
 
+			FormatterController.Formatter = Formatter;
 
 			function FormatterController(service) {
-				this._service = service || new Formatter();
+				// this._service = service || new Formatter();
 			}
 
 			FormatterController.prototype.format = format;

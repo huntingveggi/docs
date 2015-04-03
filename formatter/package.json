@@ -22,6 +22,7 @@
     "formatter-pdfkit": "file:../formatter-pdfkit",
     "snooze": "^1.0.0-alpha.6",
     "snooze-baselib": "^1.0.0-alpha.3",
-    "string": "^3.0.1"
+    "string": "^3.0.1",
+    "underscore": "^1.8.3"
   }
 }
