@@ -1,46 +1,48 @@
 {
-  "name": "formatter-components",
-  "version": "0.0.0",
-  "description": "formatter components",
-  "author": {
-    "name": "Dennis Ahaus",
-    "email": "dennis.ahaus@gmail.com",
-    "url": "http://www.dennis-ahaus.de"
-  },
-  "repository": "DennisAhaus/formatter-components",
-  "license": "MIT",
-  "files": [
-    "index.js",
-    "cli.js"
-  ],
-  "keywords": [
-    "formatter-components",
-    "formatter",
-    "component"
-  ],
-  "dependencies": {
-    "expect": "^1.6.0",
-    "meow": "^2.0.0",
-    "moment": "^2.9.0",
-    "snooze": "^1.0.0",
-    "snooze-baselib": "^1.0.0-alpha.3",
-    "string": "^3.1.1",
-    "underscore": "^1.8.3"
-  },
-  "devDependencies": {
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-nodeunit": "^0.4.1",
-    "grunt-contrib-watch": "^0.6.1",
-    "load-grunt-tasks": "^1.0.0",
-    "time-grunt": "^1.0.0",
-    "grunt-mocha-cli": "^1.11.0",
-    "jshint-stylish": "^1.0.0"
-  },
-  "scripts": {
-    "test": "grunt"
-  },
-  "bin": {
-    "formatter-components": "cli.js"
-  }
+	"name": "formatter-components",
+	"version": "0.0.0",
+	"description": "formatter components",
+	"author": {
+		"name": "Dennis Ahaus",
+		"email": "dennis.ahaus@gmail.com",
+		"url": "http://www.dennis-ahaus.de"
+	},
+	"repository": "DennisAhaus/formatter-components",
+	"license": "MIT",
+	"files": [
+		"lib",
+		"index.js",
+		"README.md",
+		"snooze.json",
+		"cli.js"
+	],
+	"keywords": [
+		"formatter-components",
+		"formatter",
+		"component"
+	],
+	"dependencies": {
+		"expect": "^1.6.0",
+		"moment": "^2.9.0",
+		"snooze": "^1.0.0",
+		"snooze-baselib": "^1.0.0-alpha.3",
+		"string": "^3.1.1",
+		"underscore": "^1.8.3"
+	},
+	"devDependencies": {
+		"grunt-cli": "^0.1.13",
+		"grunt-contrib-jshint": "^0.10.0",
+		"grunt-contrib-nodeunit": "^0.4.1",
+		"grunt-contrib-watch": "^0.6.1",
+		"load-grunt-tasks": "^1.0.0",
+		"time-grunt": "^1.0.0",
+		"grunt-mocha-cli": "^1.11.0",
+		"jshint-stylish": "^1.0.0"
+	},
+	"scripts": {
+		"test": "grunt"
+	},
+	"bin": {
+		"formatter-components": "cli.js"
+	}
 }

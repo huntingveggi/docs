@@ -18,6 +18,7 @@
     "baconjs": "^0.7.53",
     "config": "^1.12.0",
     "expect": "^1.6.0",
+    "formatter-components": "file:../formatter-components",
     "formatter-pdfkit": "file:../formatter-pdfkit",
     "snooze": "^1.0.0-alpha.6",
     "snooze-baselib": "^1.0.0-alpha.3",
