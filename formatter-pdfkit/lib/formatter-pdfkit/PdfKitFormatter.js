@@ -1,76 +1,85 @@
 (function() {
-  "use strict";
+	"use strict";
 
-  var config = require('config');
-  var S = require('string');
-  var snooze = require('snooze');
-  var PDFDocument = require('pdfkit');
-  var fs = require('fs');
+	var config = require('config');
+	var S = require('string');
+	var snooze = require('snooze');
+	var PDFDocument = require('pdfkit');
+	var fs = require('fs');
+	var us = require('underscore');
 
-  var injects = {};
+	var injects = {};
 
-  function format() {
+	function format() {
 
-    var model = this.getModel();
+		var model = this.getModel();
 
-    return new Promise(function(resolve, reject) {
+		return new Promise(function(resolve, reject) {
 
-      var doc = new PDFDocument();
-      var target = config.get("target").replace("__dirname", __dirname);
-      var file = new injects.TargetResolver("output.pdf").resolve();
-      var stream = fs.createWriteStream(file);
-      var resultStream = doc.pipe(stream);
+			var doc = new PDFDocument();
 
-      model.forEach(function(m) {
-        m.render(doc);
-      })
+			var target = config.get("target").replace("__dirname", __dirname);
+			var file = new injects.TargetResolver("output.pdf").resolve();
 
-      doc.end();
+			var stream = fs.createWriteStream(file);
+			var resultStream = doc.pipe(stream);
 
-      resultStream.on('finish', function() {
-        resolve(fs.createReadStream(file));
-      })
+			model.forEach(function(m) {
+				m.render(doc);
+			})
 
-    })
+			doc.end();
 
-  }
+			resultStream.on('finish', function() {
+				resolve(fs.createReadStream(file));
+			})
 
-  function getModel() {
-    return this._model;
-  }
+		})
 
-  snooze
-    .module("formatter-pdfkit")
-    .service("TargetResolver", function() {
+	}
 
-      function TargetResolver(name) {
-        this._target = name;
-      }
+	function getModel() {
+		return this._model;
+	}
 
-      TargetResolver.prototype.resolve = function() {
-        var root = config.get("target").replace("__dirname", __dirname);
-        root = S(root).chompRight("/").s;
-        var target = S(this._target).chompLeft("/");
-        return root + "/" + target;
-      };
+	snooze
+		.module("formatter-pdfkit")
+		.service("TargetResolver", function() {
 
-      return TargetResolver;
-    })
-    .service("PdfKitFormatter", function PdfKitFormatterFactory(
-      TargetResolver) {
+			function TargetResolver(name) {
+				this._target = name;
+			}
 
-      injects.TargetResolver = TargetResolver;
+			TargetResolver.prototype.resolve = function() {
+				var root = config.get("target").replace("__dirname", __dirname);
+				root = S(root).chompRight("/").s;
+				var target = S(this._target).chompLeft("/");
+				return root + "/" + target;
+			};
 
-      function PdfKitFormatter(model) {
-        this._model = model;
-      }
+			return TargetResolver;
+		})
+		.service("PdfKitFormatter", function factory(
+			TargetResolver, RendererDecorator) {
+
+			injects.TargetResolver = TargetResolver;
+
+			function PdfKitFormatter(model) {
+
+				model = us.map(model, function(item) {
+					new RendererDecorator(item).decorate();
+					return item;
+				})
+
+				this._model = model;
+			}
 
 
-      PdfKitFormatter.prototype.format = format;
-      PdfKitFormatter.prototype.getModel = getModel;
+			PdfKitFormatter.prototype.format = format;
+			PdfKitFormatter.prototype.getModel = getModel;
 
-      return PdfKitFormatter;
+			return PdfKitFormatter;
 
-    })
+		})
 
 }());
